@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Novo Paciente - OdontoSaaS{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+        <div class="card shadow-sm border-0 mb-5">
+            <div class="card-header bg-white py-3">
+                <h4 class="card-title mb-0"><i class="bi bi-person-plus me-2 text-primary"></i>Cadastrar Novo Paciente</h4>
+            </div>
+            <div class="card-body p-4">
+                <form action="{{ url_for('pacientes.novo') }}" method="POST">
+                    
+                    <h5 class="text-secondary mb-3"><i class="bi bi-card-heading me-1"></i> Dados Pessoais</h5>
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label for="nome" class="form-label">Nome Completo *</label>
+                            <input type="text" class="form-control" id="nome" name="nome" placeholder="Ex: João da Silva" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="cpf" class="form-label">CPF</label>
+                            <input type="text" class="form-control" id="cpf" name="cpf" placeholder="000.000.000-00">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="telefone" class="form-label">Telefone / WhatsApp</label>
+                            <input type="text" class="form-control" id="telefone" name="telefone" placeholder="(00) 00000-0000">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">E-mail</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="paciente@exemplo.com">
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <h5 class="text-secondary mb-3"><i class="bi bi-heart-pulse me-1"></i> Ficha Anamnese</h5>
+                    
+                    <div class="mb-3">
+                        <label for="alergias" class="form-label">Alergias (Medicamentos, látex, etc.)</label>
+                        <input type="text" class="form-control" id="alergias" name="alergias" placeholder="Ex: Penicilina, Dipirona (Deixe em branco se nenhuma)">
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-4 mb-2">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="hipertenso" name="hipertenso" value="1">
+                                <label class="form-check-label" for="hipertenso">Hipertenso</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="diabetico" name="diabetico" value="1">
+                                <label class="form-check-label" for="diabetico">Diabético</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-2">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="gestante" name="gestante" value="1">
+                                <label class="form-check-label" for="gestante">Gestante</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="medicamentos_em_uso" class="form-label">Medicamentos em Uso Contínuo</label>
+                        <textarea class="form-control" id="medicamentos_em_uso" name="medicamentos_em_uso" rows="2" placeholder="Ex: Losartana 50mg, Metformina..."></textarea>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="observacoes_medicas" class="form-label">Observações Médicas Relevantes</label>
+                        <textarea class="form-control" id="observacoes_medicas" name="observacoes_medicas" rows="3" placeholder="Cirurgias prévias, problemas cardíacos, ansiedade em consultas..."></textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ url_for('pacientes.lista') }}" class="btn btn-outline-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-1"></i> Salvar Paciente</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

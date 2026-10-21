@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Cadastro - OdontoSaaS{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-sm border-0">
+            <div class="card-body p-4">
+                <h3 class="card-title text-center mb-4">Criar Nova Conta</h3>
+                
+                <form action="{{ url_for('auth.register') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="nome_clinica" class="form-label">Nome da Clínica</label>
+                        <input type="text" class="form-control" id="nome_clinica" name="nome_clinica" placeholder="Ex: Clínica OdontoSorriso" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">Seu Nome Completo</label>
+                        <input type="text" class="form-control" id="nome" name="nome" placeholder="Ex: Dra. Maria Silva" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Endereço de E-mail</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="nome@exemplo.com" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="senha" class="form-label">Senha</label>
+                        <input type="password" class="form-control" id="senha" name="senha" placeholder="••••••••" required>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-4">
+                        <button type="submit" class="btn btn-primary btn-block">Registrar Clínica</button>
+                    </div>
+                </form>
+
+                <hr class="my-4">
+
+                <div class="text-center">
+                    <p class="mb-0 text-muted">Já possui uma conta? <a href="{{ url_for('auth.login') }}">Faça login</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

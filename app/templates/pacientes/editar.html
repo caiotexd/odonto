@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Paciente - {{ current_user.clinica.nome_fantasia }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{{ url_for('auth.dashboard') }}">{{ current_user.clinica.nome_fantasia }}</a>
+            <div class="d-flex align-items-center text-white">
+                <a href="{{ url_for('auth.pacientes_lista') }}" class="btn btn-outline-light btn-sm me-2">Voltar à Lista</a>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-light btn-sm">Sair</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-4" style="max-width: 700px;">
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h3 class="fw-bold text-primary mb-4">Editar Paciente</h3>
+
+                <form action="{{ url_for('auth.pacientes_editar', id=paciente.id) }}" method="POST">
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">Nome Completo *</label>
+                        <input type="text" class="form-control" id="nome" name="nome" value="{{ paciente.nome }}" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="cpf" class="form-label">CPF</label>
+                            <input type="text" class="form-control" id="cpf" name="cpf" value="{{ paciente.cpf or '' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="data_nascimento" class="form-label">Data de Nascimento</label>
+                            <input type="text" class="form-control bg-white" id="data_nascimento" name="data_nascimento" value="{{ paciente.data_nascimento.strftime('%d/%m/%Y') if paciente.data_nascimento else '' }}" placeholder="dd/mm/aaaa">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="telefone" class="form-label">Telefone / WhatsApp</label>
+                            <input type="text" class="form-control" id="telefone" name="telefone" value="{{ paciente.telefone or '' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">E-mail</label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ paciente.email or '' }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="observacoes" class="form-label">Histórico Médico / Observações</label>
+                        <textarea class="form-control" id="observacoes" name="observacoes" rows="3">{{ paciente.observacoes or '' }}</textarea>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('auth.pacientes_lista') }}" class="btn btn-outline-secondary">Cancelar</a>
+                        <button type="submit" class="btn btn-primary px-4 fw-semibold">Salvar Alterações</button>
+                    </div>
+                    <!-- Seção de Anamnese Médica -->
+<h5 class="mt-4 mb-3 text-primary"><i class="fas fa-heartbeat me-2"></i>Anamnese e Alertas Médicos</h5>
+<div class="row g-3">
+    <div class="col-md-4">
+        <div class="form-check form-switch mt-2">
+            <input class="form-check-input" type="checkbox" id="hipertenso" name="hipertenso" {{ 'checked' if paciente and paciente.hipertenso }}>
+            <label class="form-check-label fw-bold" for="hipertenso">Hipertenso</label>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-check form-switch mt-2">
+            <input class="form-check-input" type="checkbox" id="diabetico" name="diabetico" {{ 'checked' if paciente and paciente.diabetico }}>
+            <label class="form-check-label fw-bold" for="diabetico">Diabético</label>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-check form-switch mt-2">
+            <input class="form-check-input" type="checkbox" id="gestante" name="gestante" {{ 'checked' if paciente and paciente.gestante }}>
+            <label class="form-check-label fw-bold" for="gestante">Gestante</label>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <label for="alergias" class="form-label font-semibold">Alergias</label>
+        <input type="text" class="form-control" id="alergias" name="alergias" value="{{ paciente.alergias if paciente else '' }}" placeholder="Ex: Penicilina, Dipirona, Látex">
+    </div>
+
+    <div class="col-md-6">
+        <label for="medicamentos_em_uso" class="form-label font-semibold">Medicamentos em Uso</label>
+        <input type="text" class="form-control" id="medicamentos_em_uso" name="medicamentos_em_uso" value="{{ paciente.medicamentos_em_uso if paciente else '' }}" placeholder="Ex: Losartana 50mg, Metformina">
+    </div>
+</div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+    <script src="https://unpkg.com/imask"></script>
+
+    <script>
+        IMask(document.getElementById('cpf'), { mask: '000.000.000-00' });
+        IMask(document.getElementById('telefone'), {
+            mask: [{ mask: '(00) 0000-0000' }, { mask: '(00) 00000-0000' }]
+        });
+
+        const dateInput = document.getElementById('data_nascimento');
+        IMask(dateInput, {
+            mask: Date,
+            pattern: 'd/m/Y',
+            blocks: {
+                d: { mask: IMask.MaskedRange, from: 1, to: 31, maxLength: 2 },
+                m: { mask: IMask.MaskedRange, from: 1, to: 12, maxLength: 2 },
+                Y: { mask: IMask.MaskedRange, from: 1900, to: 2099 }
+            },
+            format: function (date) {
+                let day = date.getDate();
+                let month = date.getMonth() + 1;
+                const year = date.getFullYear();
+                if (day < 10) day = '0' + day;
+                if (month < 10) month = '0' + month;
+                return [day, month, year].join('/');
+            },
+            parse: function (str) {
+                const parts = str.split('/');
+                return new Date(parts[2], parts[1] - 1, parts[0]);
+            }
+        });
+
+        flatpickr(dateInput, {
+            dateFormat: "d/m/Y",
+            locale: "pt",
+            allowInput: true
+        });
+    </script>
+</body>
+</html>

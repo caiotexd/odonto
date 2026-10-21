@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}Pacientes - OdontoSaaS{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2><i class="bi bi-people me-2"></i>Lista de Pacientes</h2>
+    <a href="{{ url_for('pacientes.novo') }}" class="btn btn-primary">
+        <i class="bi bi-person-plus me-1"></i> Novo Paciente
+    </a>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        {% if pacientes %}
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-3">Nome</th>
+                        <th>CPF</th>
+                        <th>Telefone</th>
+                        <th>E-mail</th>
+                        <th>Alertas Médicos</th>
+                        <th class="text-end pe-3">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for paciente in pacientes %}
+                    <tr>
+                        <td class="ps-3 fw-bold">{{ paciente.nome }}</td>
+                        <td>{{ paciente.cpf or '—' }}</td>
+                        <td>{{ paciente.telefone or '—' }}</td>
+                        <td>{{ paciente.email or '—' }}</td>
+                        <td>
+                            {% if paciente.alergias %}
+                                <span class="badge bg-danger">Alergia</span>
+                            {% endif %}
+                            {% if paciente.hipertenso %}
+                                <span class="badge bg-warning text-dark">Hipertenso</span>
+                            {% endif %}
+                            {% if paciente.diabetico %}
+                                <span class="badge bg-info text-dark">Diabético</span>
+                            {% endif %}
+                            {% if paciente.gestante %}
+                                <span class="badge text-white" style="background-color: #6f42c1;">Gestante</span>
+                            {% endif %}
+                            {% if not paciente.alergias and not paciente.hipertenso and not paciente.diabetico and not paciente.gestante %}
+                                <span class="badge bg-secondary">Nenhum</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-end pe-3">
+                            <!-- Botão que dispara o Modal específico do paciente -->
+                            <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalPaciente{{ paciente.id }}" title="Ver Prontuário">
+                                <i class="bi bi-file-earmark-medical"></i>
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Modal de Especificações e Anamnese -->
+                    <div class="modal fade" id="modalPaciente{{ paciente.id }}" tabindex="-1" aria-labelledby="modalLabel{{ paciente.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content border-0 shadow">
+                                <div class="modal-header bg-primary text-white">
+                                    <h5 class="modal-title" id="modalLabel{{ paciente.id }}">
+                                        <i class="bi bi-person-badge me-2"></i>Prontuário: {{ paciente.nome }}
+                                    </h5>
+                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body p-4">
+                                    
+                                    <!-- Informações Pessoais -->
+                                    <h6 class="text-primary fw-bold mb-3"><i class="bi bi-card-heading me-1"></i> Dados do Paciente</h6>
+                                    <div class="row g-3 mb-4">
+                                        <div class="col-md-6">
+                                            <strong>CPF:</strong> {{ paciente.cpf or 'Não informado' }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong>Telefone:</strong> {{ paciente.telefone or 'Não informado' }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <strong>E-mail:</strong> {{ paciente.email or 'Não informado' }}
+                                        </div>
+                                    </div>
+
+                                    <hr>
+
+                                    <!-- Ficha de Anamnese -->
+                                    <h6 class="text-primary fw-bold mb-3"><i class="bi bi-heart-pulse me-1"></i> Ficha Anamnese e Condições de Saúde</h6>
+                                    
+                                    <div class="mb-3">
+                                        <strong>Alertas Rápidos:</strong><br>
+                                        {% if paciente.hipertenso %}
+                                            <span class="badge bg-warning text-dark me-1">Hipertenso</span>
+                                        {% endif %}
+                                        {% if paciente.diabetico %}
+                                            <span class="badge bg-info text-dark me-1">Diabético</span>
+                                        {% endif %}
+                                        {% if paciente.gestante %}
+                                            <span class="badge text-white me-1" style="background-color: #6f42c1;">Gestante</span>
+                                        {% endif %}
+                                        {% if not paciente.hipertenso and not paciente.diabetico and not paciente.gestante %}
+                                            <span class="text-muted">Nenhum fator de risco sistêmico declarado.</span>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <strong>Alergias Declaradas:</strong>
+                                        <p class="text-danger mb-0">{{ paciente.alergias or 'Nenhuma alergia relatada.' }}</p>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <strong>Medicamentos em Uso:</strong>
+                                        <p class="mb-0">{{ paciente.medicamentos_em_uso or 'Nenhum medicamento contínuo relatado.' }}</p>
+                                    </div>
+
+                                    <div class="mb-2">
+                                        <strong>Observações Médicas Relevantes:</strong>
+                                        <p class="mb-0 text-muted">{{ paciente.observacoes_medicas or 'Sem observações adicionais.' }}</p>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer bg-light">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Fim do Modal -->
+
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center py-5">
+            <i class="bi bi-person-x text-muted display-4 mb-3 d-block"></i>
+            <h5 class="text-muted">Nenhum paciente cadastrado ainda.</h5>
+            <p class="text-muted mb-3">Clique no botão abaixo para registrar o primeiro paciente da clínica.</p>
+            <a href="{{ url_for('pacientes.novo') }}" class="btn btn-primary btn-sm">
+                <i class="bi bi-person-plus me-1"></i> Cadastrar Paciente
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
